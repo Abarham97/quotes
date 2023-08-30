@@ -43,10 +43,11 @@ public class App {
             quoteFile.writeQuotesToLocalFile(save);
         } catch (Exception e) {
             System.out.println("Fetching from URL failed. Reading from local file...");
+            Quote randomQuote1 = quoteFile.getRandomQuote();
+            System.out.println("Random Quote from Local File: " + randomQuote1);
         }
 
-        Quote randomQuote1 = quoteFile.getRandomQuote();
-        System.out.println("Random Quote from Local File: " + randomQuote1);
+
     }
 
 
