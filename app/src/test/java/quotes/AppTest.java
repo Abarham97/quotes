@@ -3,19 +3,78 @@
  */
 package quotes;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class AppTest {
+
+
+    private RandomQuote randomQuoteFetcher;
+    private RandomQuoteFile randomQuoteFile;
+
+    @BeforeEach
+    void setUp() {
+        randomQuoteFetcher = new RandomQuote();
+        randomQuoteFile = new RandomQuoteFile();
+    }
+
     @Test
-    public void testRandomQuoteFetch() {
-        RandomQuote quoteFetcher = new RandomQuote();
-        Quote randomQuote = quoteFetcher.getRandomQuote();
+    void testRandomQuoteFetch() {
+        List<Quote> quotes = randomQuoteFetcher.fetchQuotes();
+        assertNotNull(quotes);
+        assertTrue(quotes.size() > 0);
+    }
 
-        assertNotNull(randomQuote);
-        assertNotNull(randomQuote.getQuote());
-        assertNotNull(randomQuote.getAuthor());
+    @Test
+    void testRandomQuoteGetRandom() {
+        Quote quote = randomQuoteFetcher.getRandomQuote();
+        assertNotNull(quote);
+        assertNotNull(quote.getQuote());
+        assertNotNull(quote.getAuthor());
+    }
 
-        System.out.println("Random Quote: " + randomQuote);
+    @Test
+    void testRandomQuoteFileFetch() {
+        List<Quote> quotes = randomQuoteFile.fetchQuotes();
+        assertNotNull(quotes);
+        assertTrue(quotes.size() > 0);
+    }
+
+    @Test
+    void testRandomQuoteFileWrite() {
+
+        Quote randomQuote = randomQuoteFetcher.getRandomQuote();
+
+        List<Quote> quotesBeforeWrite = randomQuoteFile.fetchQuotes();
+        quotesBeforeWrite.add(randomQuote);
+        randomQuoteFile.writeQuotesToLocalFile(quotesBeforeWrite);
+
+
+        List<Quote> quotesAfterWrite = randomQuoteFile.fetchQuotes();
+
+
+        assertTrue(quotesAfterWrite.contains(randomQuote));
+    }
+
+    @Test
+    void testRandomQuoteFileRead() {
+
+        Quote randomQuote = randomQuoteFetcher.getRandomQuote();
+
+
+        List<Quote> quotesBeforeWrite = randomQuoteFile.fetchQuotes();
+        quotesBeforeWrite.add(randomQuote);
+        randomQuoteFile.writeQuotesToLocalFile(quotesBeforeWrite);
+
+
+        Quote readQuote = randomQuoteFile.getRandomQuote();
+
+
+        assertEquals(randomQuote.getQuote(), readQuote.getQuote());
+        assertEquals(randomQuote.getAuthor(), readQuote.getAuthor());
     }
 }

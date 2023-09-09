@@ -25,7 +25,7 @@ public class RandomQuote {
         quotes = fetchQuotes();
     }
 
-    private List<Quote> fetchQuotes() {
+    List<Quote> fetchQuotes() {
         List<Quote> quoteList = new ArrayList<>();
 
         try {
